@@ -1,36 +1,65 @@
 import express from "express";
-import { myDB } from "../db/myMongoDB.js";
+import { myDB, DatabaseError } from "../db/myMongoDB.js";
 
 const router = express.Router();
 
+// Validation middleware
+const validatePlayerUpdate = (req, res, next) => {
+  const { votes } = req.body;
+  if (typeof votes !== 'number') {
+    return res.status(400).json({ error: "Votes must be a number" });
+  }
+  if (votes < 0) {
+    return res.status(400).json({ error: "Votes cannot be negative" });
+  }
+  next();
+};
+
 /* GET home page. */
 router.get("/", async function (req, res) {
-  const query = req.query.query || {};
-  const page = req.query.page || 1;
-  const limit = req.query.limit || 20;
-  console.log("getPlayers query", query, page, limit);
-
   try {
+    const query = req.query.query || {};
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
+
+    if (page < 1 || limit < 1) {
+      return res.status(400).json({ error: "Invalid pagination parameters" });
+    }
+
     const players = await myDB.getPlayers({ query, page, limit });
-    console.log("get players", players.length);
-    res.json({ players: players });
+    res.json({ players });
   } catch (error) {
     console.error("Error fetching players:", error);
-    res.status(500).json({ error: "Failed to fetch players" });
+    if (error instanceof DatabaseError) {
+      res.status(500).json({ error: error.message });
+    } else {
+      res.status(500).json({ error: "Internal server error" });
+    }
   }
 });
 
-router.put("/:id", async function (req, res) {
-  const id = req.params.id;
-  const player = req.body;
-  console.log("update player", id, player);
-
+router.put("/:id", validatePlayerUpdate, async function (req, res) {
   try {
-    const newPlayer = await myDB.updatePlayer(id, player);
-    res.json({ player: newPlayer });
+    const id = req.params.id;
+    const player = req.body;
+
+    if (!id) {
+      return res.status(400).json({ error: "Player ID is required" });
+    }
+
+    const result = await myDB.updatePlayer(id, player);
+    res.json({ success: true, result });
   } catch (error) {
     console.error("Error updating player:", error);
-    res.status(500).json({ error: "Failed to update player" });
+    if (error instanceof DatabaseError) {
+      if (error.code === 'NOT_FOUND') {
+        res.status(404).json({ error: "Player not found" });
+      } else {
+        res.status(500).json({ error: error.message });
+      }
+    } else {
+      res.status(500).json({ error: "Internal server error" });
+    }
   }
 });
 
