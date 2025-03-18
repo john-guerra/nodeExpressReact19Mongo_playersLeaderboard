@@ -1,90 +1,93 @@
-#!/usr/bin/env node
+// #!/usr/bin/env node
 
-/**
- * Module dependencies.
- */
+// /**
+//  * Module dependencies.
+//  */
 
-import app from "../app.js";
-import debugPckg from "debug";
+// import app from "../app.js";
 
-import http from "http";
 
-const debug = debugPckg("express-graphql-mongodb:server");
+// // import http from "http";
 
-/**
- * Get port from environment and store in Express.
- */
+// const debug = debugPckg("express-mongodb-players-leaderboard:server");
 
-let port = normalizePort(process.env.PORT || "3000");
-app.set("port", port);
+// /**
+//  * Get port from environment and store in Express.
+//  */
 
-/**
- * Create HTTP server.
- */
+// let port = normalizePort(process.env.PORT || "3000");
 
-let server = http.createServer(app);
+// app.listen(port, onListening);
+// // app.set("port", port);
 
-/**
- * Listen on provided port, on all network interfaces.
- */
+// // /**
+// //  * Create HTTP server.
+// //  */
 
-server.listen(port);
-server.on("error", onError);
-server.on(`listening`, onListening);
+// // let server = http.createServer(app);
 
-/**
- * Normalize a port into a number, string, or false.
- */
+// // /**
+// //  * Listen on provided port, on all network interfaces.
+// //  */
 
-function normalizePort(val) {
-  let port = parseInt(val, 10);
+// // server.listen(port);
+// // server.on("error", onError);
+// // server.on(`listening`, onListening);
 
-  if (isNaN(port)) {
-    // named pipe
-    return val;
-  }
+// /**
+//  * Normalize a port into a number, string, or false.
+//  */
 
-  if (port >= 0) {
-    // port number
-    return port;
-  }
+// function normalizePort(val) {
+//   let port = parseInt(val, 10);
 
-  return false;
-}
+//   if (isNaN(port)) {
+//     // named pipe
+//     return val;
+//   }
 
-/**
- * Event listener for HTTP server "error" event.
- */
+//   if (port >= 0) {
+//     // port number
+//     return port;
+//   }
 
-function onError(error) {
-  if (error.syscall !== "listen") {
-    throw error;
-  }
+//   return false;
+// }
 
-  let bind = typeof port === "string" ? "Pipe " + port : "Port " + port;
+// /**
+//  * Event listener for HTTP server "error" event.
+//  */
 
-  // handle specific listen errors with friendly messages
-  switch (error.code) {
-    case "EACCES":
-      console.error(bind + " requires elevated privileges");
-      process.exit(1);
-      break;
-    case "EADDRINUSE":
-      console.error(bind + " is already in use");
-      process.exit(1);
-      break;
-    default:
-      throw error;
-  }
-}
+// function onError(error) {
+//   if (error.syscall !== "listen") {
+//     throw error;
+//   }
 
-/**
- * Event listener for HTTP server "listening" event.
- */
+//   let bind = typeof port === "string" ? "Pipe " + port : "Port " + port;
 
-function onListening() {
-  console.log("Starting backend on port " + port);
-  let addr = server.address();
-  let bind = typeof addr === "string" ? "pipe " + addr : "port " + addr.port;
-  debug("Backend Listening on " + bind);
-}
+//   // handle specific listen errors with friendly messages
+//   switch (error.code) {
+//     case "EACCES":
+//       console.error(bind + " requires elevated privileges");
+//       process.exit(1);
+//       break;
+//     case "EADDRINUSE":
+//       console.error(bind + " is already in use");
+//       process.exit(1);
+//       break;
+//     default:
+//       throw error;
+//   }
+// }
+
+// /**
+//  * Event listener for HTTP server "listening" event.
+//  */
+
+// function onListening() {
+//   console.log("Starting backend on port " + port);
+//   let addr = app.address();
+//   let bind = typeof addr === "string" ? "pipe " + addr : "port " + addr.port;
+//   debug("Backend Listening on " + bind);
+// }
+

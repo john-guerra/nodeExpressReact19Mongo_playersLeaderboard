@@ -60,30 +60,6 @@ export default function PlayersList() {
     };
   }, []);
 
-  if (loading) {
-    return (
-      <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '200px' }}>
-        <Spinner animation="border" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </Spinner>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <Alert variant="danger" className="m-3">
-        Error: {error}
-        <button
-          className="btn btn-outline-danger ms-3"
-          onClick={fetchPlayers}
-        >
-          Retry
-        </button>
-      </Alert>
-    );
-  }
-
   function renderPlayers() {
     return players.map((p, index) => (
       <Player
@@ -100,16 +76,34 @@ export default function PlayersList() {
   }
 
   return (
-    <div className="players">
-      <div className="mb-3">
-        <strong>Top three players:</strong>
-        {players.slice(0, 3).map((p, index) => (
-          <span key={index} className="ms-2">
-            {index + 1}. {p.name} ({p.votes} votes)
-          </span>
-        ))}
-      </div>
-      {renderPlayers()}
-    </div>
+    <>
+      {error && (
+        <Alert variant="danger" className="m-3">
+          Error: {error}
+          <button
+            className="btn btn-outline-danger ms-3"
+            onClick={fetchPlayers}
+          >
+            Retry
+          </button>
+        </Alert>
+      )}
+      {(updating || loading) && (
+        <div
+          className="d-flex justify-content-center align-items-center"
+          style={{ minHeight: "200px" }}
+        >
+          <Spinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
+        </div>
+      )}
+      {players.slice(0, 3).map((p, index) => (
+        <span key={index} className="ms-2">
+          {index + 1}. {p.name} ({p.votes} votes)
+        </span>
+      ))}
+      <div className="players">{renderPlayers()}</div>
+    </>
   );
 }
