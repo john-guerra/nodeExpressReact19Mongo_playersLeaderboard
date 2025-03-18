@@ -20,9 +20,6 @@ A full-stack leaderboard application built with React and MongoDB that allows us
 2. Install dependencies:
    ```bash
    npm install
-   cd frontend
-   npm install
-   cd ..
    ```
 
 3. Set up environment variables:
@@ -42,6 +39,30 @@ A full-stack leaderboard application built with React and MongoDB that allows us
    npm install
    npm run dev
    ```
+
+## Deploy
+
+```bash
+npm install
+npm run build
+npm install -g vercel
+vercel login
+```
+
+Test deployment locally
+
+```bash
+vercel pull env
+vercel dev
+```
+
+Deploy
+```bash
+vercel
+```
+
+Finally make sure to create a [vercel MONGO_URI environment variable](https://vercel.com/docs/environment-variables) in your project with your Mongo Atlas private key
+
 
 ## API Endpoints
 
